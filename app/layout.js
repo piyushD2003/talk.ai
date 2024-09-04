@@ -1,7 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import SessionWrapper from "@/components/SessionWrapper";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +13,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="bg-gradient-to-r from-slate-500 to-slate-800">
+        <SessionWrapper>
+          <Navbar/>
+          <div className="min-h-screen">{children}</div>
+          <Footer/>
+        </SessionWrapper>
+      </body>
     </html>
   );
 }
