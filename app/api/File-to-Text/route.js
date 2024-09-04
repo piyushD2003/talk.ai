@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request) {
-  const genAI = new GoogleGenerativeAI("AIzaSyDgGDphqJpLaymEWQ4XA3zSWZ9i5AVLyEs");
+  const genAI = new GoogleGenerativeAI(process.env.GEMINIAPIKEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const { data, mimeType } = await request.json();
 
