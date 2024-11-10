@@ -14,7 +14,7 @@ const FileProcessing = () => {
       setMimetype(file.type)
       console.log("handle sumbit", mimetype);
     }
-  }, [])
+  }, [file, mimetype])
 
   const handleSubmit = async (e) => {
     setIsSubmitting(true)

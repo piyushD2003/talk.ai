@@ -26,7 +26,7 @@ const Aptitude = () => {
         if(time===-1){
             setIsSubmitting(false)
         }
-    }, [])
+    }, [time])
 
     const changevalue = (e) => {
         setMocktest({ ...mocktest, [e.target.name]: e.target.value })
@@ -121,7 +121,7 @@ const Aptitude = () => {
 
         }";2)Ensure the response is strictly in JSON format without any markdown, 'json', or backticks. Only output valid JSON. 3)You only have to give the question nothing else. 4) This response i.e "user" is my last after that is not avaliable. 5)choosed should be empty in starting. 6)In options, right answer should be random not only in first place, REMEBER THAT! 7) In Explain: must and compulsory provide information why correct option is correct(in brief) Mandatory`
 
-    }, [isSubmitting])
+    }, [isSubmitting,chatHistory,mocktest.test])
 
     useEffect(() => {
         if (isSubmitting && time >-1) {

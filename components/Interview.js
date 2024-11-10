@@ -20,7 +20,7 @@ const AudioRecorderNative = () => {
     if (Resume) {
       chatHistory[0].parts[0].text = `You are the Interviewer,Interview is about ${info}. Resume: '${Resume}',look at my resume and anaylise it then take interview and ask the Technical question related to interview based. Mandatory thing for you 1.Your words should be very human and dont provide your gesture explanation 2.Your Response Not feel some like a computerised talk 3.Be a Strict person 'according my response' 4.In this conversation you have to stop when you made a conclusion and end the interview 5. Whenever you wanted to end the interview you can end if you think I'm not taking this interview seriously or commenting something inappropriate 6.Don't get from your charater whatever I say don't feel your self a AI until this conversation ends`
     }
-  }, [Resume])
+  }, [Resume,info,chatHistory])
 
   const changevalue = (e) => {
     setInfo(e.target.value)

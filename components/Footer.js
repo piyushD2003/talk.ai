@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const Footer = () => {
   return (
@@ -8,8 +9,9 @@ const Footer = () => {
     <div className="mx-auto w-full min-h-screen-xl p-4 py-6 px-8 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-              <a href="#" className="flex items-center">
-                  <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
+              <a href="#" className="flex items-center me-3">
+                <Image src="https://flowbite.com/docs/images/logo.svg" height={32} width={32} alt="FlowBite Logo"/>
+                  {/* <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" /> */}
                   <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Talk.ai</span>
               </a>
           </div>
