@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body className="bg-gradient-to-r from-slate-500 to-slate-800">
         <SessionWrapper>
           <Navbar/>
-          <div className="min-h-screen">{children}</div>
+          <div className="min-h-screen pt-[1.70cm]">{children}</div>
           <Footer/>
         </SessionWrapper>
       </body>

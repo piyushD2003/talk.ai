@@ -2,10 +2,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request) {
     try {
-    const { audio, mimeType, history } = await request.json();
-
+    const { audio, mimeType, history, api } = await request.json();
     // Initialize GoogleGenerativeAI with your API key.
-    const genAI = new GoogleGenerativeAI(process.env.GEMINIAPIKEY);
+    const genAI = new GoogleGenerativeAI(api);
 
     // Initialize a Gemini model appropriate for your use case.
     const model = genAI.getGenerativeModel({

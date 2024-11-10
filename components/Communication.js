@@ -1,14 +1,17 @@
-
-
 "use client"
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 
 const AudioRecorderNative = () => {
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const [chatHistory, setChatHistory] = useState([
-    { role: "user", parts: [{ text: `Please act as an Proffesional English language tutor. I want to improve my English through interactive conversation. Correct any grammatical errors I make, provide alternative phrasings or vocabulary, and explain any mistakes or corrections clearly. You can also ask me questions to test my understanding, and provide exercises or challenges related to grammar, vocabulary, and sentence structure, etc . Note: 1.You response should be very human not give filling of computerized conversation 2.Your Reponse must not much big 3. provide you response in this format: "{\"ResponseTutor\":\"you should say Hello, I'm Piyush\", \"Feedback\":\"Hello, I'm Piyush\"}"; In ResponseTutor key, provide suggestion or whatever you wanted and In Feedback key,just provide the improved grammar sentence of my sentance dont explain otherwise if not needed put " ".` }], },
+    { role: "user", parts: [{ text: `Please act as an Proffesional English language tutor. I want to improve my English through interactive conversation. Correct any grammatical errors I make, provide alternative phrasings or vocabulary, and explain any mistakes or corrections clearly. You can also ask me questions to test my understanding, and provide exercises or challenges related to grammar, vocabulary, and sentence structure, etc . Note: 1)You response should be very human not give filling of computerized conversation 2)Your Reponse must not much big 3. provide you response in this format: 
+      "{
+      \"ResponseTutor\":\" \",
+      \"Feedback\":\" \"
+      }"
+      ; In ResponseTutor key, provide suggestion or whatever you wanted and In Feedback key,just provide the improved grammar sentence of my sentance dont explain otherwise if not needed put " ". 3)Ensure the response is strictly in JSON format without any markdown, 'json', or backticks. Only output valid JSON. ` }], },
     { role: "model", parts: [{ text: "I understood, let start our interactive " }], },
   ])
 
@@ -100,12 +103,13 @@ const AudioRecorderNative = () => {
         setChatHistory([...chatHistory, { role: "user", parts: [{ text: result.transcript }], }, { role: "model", parts: [{ text: result.AiResponse }], }])
       }
       const jsonObject = JSON.parse(result.AiResponse);
-      console.log("Response json",result.AiResponse);
-      
+      console.log("Response json", result.AiResponse);
+      // console.log("Response json",jsonObject);
+
       // console.log(jsonObject.ResponseTutor);
       // console.log(jsonObject.Feedback);
-      
-      
+
+
       await playtranscriptAudio(jsonObject.ResponseTutor)
     } catch (error) {
       console.error('Error sending audio to Gemini API:', error);
@@ -113,15 +117,15 @@ const AudioRecorderNative = () => {
   };
   return (
     <div className='relative min-h-screen pb-20 flex flex-col'>
-      <div className='text-4xl m-4 font-bold grid justify-items-center'>Communicate with AI</div>
+      <div className='text-xl md:text-4xl m-4 font-bold grid justify-items-center'>Communicate with AI</div>
       <div>
         {chatHistory.length < 2 ?
           chatHistory.length : chatHistory.slice(2).map((h, i) => {
             let res;
             let feed;
-            if(h.role == "model"){
+            if (h.role == "model") {
               const ResponseHis = JSON.parse(h.parts[0].text)
-              console.log("Testing:",ResponseHis)
+              console.log("Testing:", ResponseHis)
               res = ResponseHis.ResponseTutor
               feed = ResponseHis.Feedback
             }
@@ -137,15 +141,15 @@ const AudioRecorderNative = () => {
             }
             return (
               <div key={i} className={`w-54 m-3 my-6 mx-5 ${flex} text-white `}><span className={`${rounded} ${shadow} max-w-[70%] p-4 ${bg}`}>
-                {h.role!="model"?h.parts[0].text:<>{res}<hr></hr><p className='bg-gray-600 p-1'>{feed}</p></>}
+                {h.role != "model" ? h.parts[0].text : <>{res}<hr></hr><p className='bg-gray-600 p-1'>{feed}</p></>}
                 {/* {ResponseHis.correct} */}
-                </span></div>
+              </span></div>
             )
           })}
       </div>
       <div className='absolute bottom-0 w-full mb-2 grid justify-items-center pt-2 bg-gradient-to-r from-gray-500 to-slate-700 object-right-bottom shadow-2xl'>
-        <button type="button" onClick={startRecording} class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">{recording ? 'Stop Recording' : 'Start Recording'}</button>
-        {/* <button type="button" onClick={stopRecording} disabled={!recording} class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Stop Recording</button> */}
+        <button type="button" onClick={startRecording} className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">{recording ? 'Stop Recording' : 'Start Recording'}</button>
+        {/* <button type="button" onClick={stopRecording} disabled={!recording} className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Stop Recording</button> */}
       </div>
     </div>
   );

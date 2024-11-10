@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 
 const AudioRecorderNative = () => {
   const [recording, setRecording] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const [chatHistory, setChatHistory] = useState([
@@ -62,6 +63,8 @@ const AudioRecorderNative = () => {
       // Stop recording
       mediaRecorderRef.current.stop();
       setRecording(false);
+      setIsPlaying(true);
+
     }
   };
 
@@ -88,20 +91,19 @@ const AudioRecorderNative = () => {
 
   const playtranscriptAudio = async (GeminiTranscript) => {
     // Sending the transcript to the server to get the audio response
+    if (isPlaying) return; // Disable if already playing
+
+    setIsPlaying(true);
     const response = await fetch('/api/Text-to-Speech', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text: GeminiTranscript }),
+      body: JSON.stringify({ text: GeminiTranscript, api: localStorage.getItem('Skey') }),
     });
 
-    const audioBlob = await response.blob();
-    const audioUrl = URL.createObjectURL(audioBlob);
+    setIsPlaying(!response.ok)
 
-    // Create an audio element and play the audio
-    const audio = new Audio(audioUrl);
-    audio.oncanplaythrough = () => audio.play();
   }
 
   const sendAudioToGeminiAPI = async (base64Audio) => {
@@ -115,6 +117,7 @@ const AudioRecorderNative = () => {
           audio: base64Audio,
           mimeType: 'audio/wav', // Adjust this if you use a different audio format
           history: chatHistory,
+          api: localStorage.getItem('Skey')
         }),
       });
       const result = await response.json();
@@ -129,7 +132,7 @@ const AudioRecorderNative = () => {
   };
   return (
     <div className='relative min-h-screen pb-20 flex flex-col'>
-      <div className='text-4xl m-4 font-bold grid justify-items-center'>AI Interview</div>
+      <div className='text-xl md:text-4xl m-4 font-bold grid justify-items-center'>AI Chatbot</div>
       {/* {blobURL && (
         <div>
           <h3>Recorded Audio:</h3>
@@ -157,14 +160,16 @@ const AudioRecorderNative = () => {
               rounded = "rounded-l-[13px] rounded-br-[13px]"
               shadow = "shadow-[-5px_6px_23px_0px_#718096]"
             }
-            return (<div key={i} className={`w-54 m-3 my-6 mx-5 ${flex} text-white `}><span className={`${rounded} ${shadow} max-w-[70%] p-4 ${bg}`}>
-              {h.parts[0].text}
+            return (<div key={i} className={`w-54 m-3 my-6 mx-5 ${flex} text-white text-[0.72rem] md:text-[1rem]`}><span className={`${rounded} ${shadow} max-w-[70%] p-4 ${bg}`}>
+              <p className='' dangerouslySetInnerHTML={{ __html: h.parts[0].text}} style={{ "whiteSpace": "pre-wrap", }}></p>
+
+              {/* {h.parts[0].text} */}
             </span></div>)
           })}
       </div>
       <div className='absolute bottom-0 w-full mb-2 grid justify-items-center pt-2 bg-gradient-to-r from-gray-500 to-slate-700 object-right-bottom shadow-2xl'>
-        <button type="button" onClick={startRecording} class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">{recording ? 'Stop Recording' : 'Start Recording'}</button>
-        {/* <button type="button" onClick={stopRecording} disabled={!recording} class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Stop Recording</button> */}
+        <button type="button" onClick={startRecording} disabled={isPlaying? true : false} className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">{recording ? 'Stop Recording' : 'Start Recording'}</button>
+        {/* <button type="button" onClick={stopRecording} disabled={!recording} className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Stop Recording</button> */}
       </div>
     </div>
   );

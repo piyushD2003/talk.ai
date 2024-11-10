@@ -7,37 +7,22 @@ export async function POST(request) {
         
         // Parse the JSON body to get the text
         const { text } = await request.json();
-        console.log(text);
-        
         if (!text) {
-            console.log("No text");
-            
             return NextResponse.json({ error: 'Text is required' }, { status: 400 });
         }
 
-        // Create a stream to hold the audio data
-        const audioStream = new PassThrough();
-
-        // Convert text to speech and pipe it into the stream
+        // Generate the audio
         await new Promise((resolve, reject) => {
-            say.speak(text, 'Alex', 1.3, (err, speaking) => {
+            say.speak(text, 'Microsoft David Desktop', 1.4, (err) => {
                 if (err) {
-                    reject(err);
+                    return new Response(reject(err));
                 } else {
-                    speaking.pipe(audioStream);
-                    speaking.on('end', resolve);
-                    speaking.on('error', reject);
+                    return new Response(resolve("Done"));
                 }
             });
-        });
-
-        // Create a response that streams the audio content
-        return new Response(audioStream, {
-            headers: {
-                'Content-Type': 'audio/mpeg',
-                'Transfer-Encoding': 'chunked',
-            },
-        });
+          });
+        
+        return new Response("done");
 
     } catch (error) {
         console.error('Error processing text-to-speech request:', error);

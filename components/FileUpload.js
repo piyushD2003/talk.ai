@@ -59,6 +59,7 @@ export default function FileUpload({onDataReceived}) {
         body: JSON.stringify({
           data: base64String,
           mimeType: 'application/pdf', // Adjust this if you use a different audio format
+          api: localStorage.getItem('Skey')
         }),
       });
       const result = await res.json()
@@ -79,10 +80,9 @@ export default function FileUpload({onDataReceived}) {
   return (
     <form className="bg-gray-700 p-3 rounded-lg shadow-md" onSubmit={handleSubmit}>
   <div className="flex items-center space-x-4">
-    <input className="flex-grow px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" type="file" onChange={handleFileChange}
+    <input className="md:size-11 size-7 flex-grow px-3 md:py-2 border border-gray-300 rounded-lg md:text-[16px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" type="file" onChange={handleFileChange}
     />
-    <button type="submit" disabled={isSubmitting} className={`px-4 py-2 font-semibold text-black bg-blue-200 rounded-lg shadow-md transition duration-300 ease-in-out ${ isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-blue-600'}`}
-    >
+    <button type="submit" disabled={isSubmitting} className={`md:w-22 md:h-10 w-16 h-8 md:text-[16px] text-sm grid justify-center px-4 py-2 font-semibold text-black bg-blue-200 rounded-lg shadow-md transition duration-300 ease-in-out ${ isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-blue-600'}`}>
       {fileTranscript !== null ? 'Submitted' : 'Submit'}
     </button>
   </div>
