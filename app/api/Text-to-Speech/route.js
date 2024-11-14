@@ -22,7 +22,9 @@ export async function POST(request) {
             });
           });
         
-        return new Response("done");
+          return new Response(JSON.stringify("done"), {
+            headers: { 'Content-Type': 'application/json' },
+          });
 
     } catch (error) {
         console.error('Error processing text-to-speech request:', error);

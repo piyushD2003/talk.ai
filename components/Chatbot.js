@@ -124,8 +124,9 @@ const AudioRecorderNative = () => {
       if (result) {
         setChatHistory([...chatHistory, { role: "user", parts: [{ text: result.transcript }], }, { role: "model", parts: [{ text: result.AiResponse }], }])
       }
+    setIsPlaying(!response.ok)
 
-      await playtranscriptAudio(result.AiResponse)
+      // await playtranscriptAudio(result.AiResponse)
     } catch (error) {
       console.error('Error sending audio to Gemini API:', error);
     }

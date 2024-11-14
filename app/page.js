@@ -24,7 +24,7 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-        <h1 className="text-7xl font-bold tracking-widest ">TALK.AI</h1>
+        <h1 className="text-7xl font-bold tracking-widest ">AI BASED JOB CRACKER</h1>
         <pre className="mt-4 md:text-lg text-sm max-w-lg overflow-hidden h-[112px]">
         {text}
           {/* Mountains are formed through tectonic forces or volcanism. These forces can locally raise the surface of the earth. Mountains erode slowly through the action of rivers, weather conditions, and glaciers. */}

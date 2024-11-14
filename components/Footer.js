@@ -12,7 +12,7 @@ const Footer = () => {
               <a href="#" className="flex items-center me-3">
                 <Image src="https://flowbite.com/docs/images/logo.svg" height={32} width={32} alt="FlowBite Logo"/>
                   {/* <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" /> */}
-                  <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Talk.ai</span>
+                  <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">AI Based Job Cracker</span>
               </a>
           </div>
           <div className="grid grid-cols-3 gap-8 sm:gap-6 sm:grid-cols-3">
