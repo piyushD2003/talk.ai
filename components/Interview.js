@@ -11,6 +11,8 @@ const AudioRecorderNative = () => {
   const [info, setInfo] = useState(null)
   const [isPlaying, setIsPlaying] = useState(true);
   const [isinfo, setIsinfo] = useState(false);
+  const [audioIndex, setAudioIndex] = useState(0);
+  const [audioUrl, setAudioUrl] = useState([]);
   const [chatHistory, setChatHistory] = useState([
     { role: "user", parts: [{ text: `You are the Interviewer name whatever you wanted to give your self, Mandatory thing for you 1.Your words should be very human and dont provide your gesture explanation 2.Your Response Not feel some like a AI talk 3.Be a Strict person 'according my response' 4.In this conversation you have to stop when you made a conclusion and end the interview 5. Whenever you wanted to end the interview you can end if you think I'm not taking this interview seriously or commenting something inappropriate 6.Don't get from your charater whatever I say don't feel your self a AI until this conversation ends` }], },
     { role: "model", parts: [{ text: "I understood." }], },
@@ -91,7 +93,8 @@ const AudioRecorderNative = () => {
   // };
 
   const playtranscriptAudio = async (GeminiTranscript) => {
-    if (isPlaying) return; // Disable if already playing
+    try {
+      if (isPlaying) return; // Disable if already playing
 
     setIsPlaying(true);
     // Sending the transcript to the server to get the audio response
@@ -102,7 +105,70 @@ const AudioRecorderNative = () => {
       },
       body: JSON.stringify({ text: GeminiTranscript }),
     });
-    setIsPlaying(!response.ok)
+    // const audiodata = await response.json()
+    console.log(response);
+    // console.log(audiodata);
+    // console.log(audiodata[0]);
+    
+    
+    // setAudioIndex(audiodata.length)
+    // setAudioUrl(audiodata)
+    // const audioResponse = await fetch(audiodata[0], { mode: "no-cors" });
+    // console.log(audioResponse);
+
+    // const audioBuffer = await audioResponse.arrayBuffer();
+    // console.log(audioBuffer);
+    // const audioBlob = await Blob([audioBuffer], { type: 'audio/mpeg' });
+    // console.log(audioBlob);
+    const audioBlob = await response.blob();
+    console.log(audioBlob);
+    
+    const audiourl = URL.createObjectURL(audioBlob);
+    console.log(audiourl);
+    const audio = new Audio();
+    audio.src = audiourl
+    console.log(audio);
+    audio.playbackRate = 1.4
+    audio.play();
+        
+        audio.onended =() => {
+          // setIsPlaying(false);
+          URL.revokeObjectURL(audioUrl);
+        };
+    // const playNextAudio = async () => {
+    //   console.log(1);
+      
+    //   try {
+    //     if (audioIndex >= audioUrl) return;
+        
+    //     const audioResponse = await fetch(audioUrl[audioIndex]);
+    //     const audioBuffer = await audioResponse.arrayBuffer();
+        
+    //     const audioBlob = await blob([audioBuffer], { type: 'audio/mpeg' });
+    //     const audiourl = URL.createObjectURL(audioBlob);
+        
+    //     const audio = new Audio(audiourl);
+    //     audio.play();
+        
+    //     audio.onended =() => {
+    //       // setIsPlaying(false);
+    //       console.log(audioIndex);
+    //       setAudioIndex(audioIndex+1)
+    //       URL.revokeObjectURL(audioUrl);
+    //       playNextAudio()
+    //       // setIsPlaying(!response.ok)
+    //     };
+    //   } catch (error) {
+    //     console.error('playnextaudio function error:', error);
+    //   }
+    // }
+    // console.log(11);
+    // await playNextAudio();
+    setIsPlaying(false);
+    } catch (error) {
+      console.error('playtranscriptAudio function error:', error);
+    }
+
   }
 
   const sendAudioToGeminiAPI = async (base64Audio) => {
