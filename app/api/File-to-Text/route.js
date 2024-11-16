@@ -20,7 +20,7 @@ export async function POST(request) {
   ])
   const FileTranscript=generatedContent.response.text()
   
-  return new Response(JSON.stringify({text:FileTranscript}), {
+  return new Response(JSON.stringify(FileTranscript), {
     headers: { 'Content-Type': 'application/json' },
   });
   

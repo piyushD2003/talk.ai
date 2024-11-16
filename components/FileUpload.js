@@ -63,14 +63,14 @@ export default function FileUpload({onDataReceived}) {
         }),
       });
       const result = await res.json()
-      console.log(result.text);
-
       setFileTranscript(result.text)
-      if (result) {
-        console.log('File uploaded successfully');
-      } else {
-        console.error('Failed tocvcv upload file');
-      }
+      console.log(result);
+
+      // if (result) {
+      //   console.log('File uploaded successfully');
+      // } else {
+      //   console.error('Failed tocvcv upload file');
+      // }
     } catch (error) {
       console.error('An error occurred while uploading the file:', error);
     }
