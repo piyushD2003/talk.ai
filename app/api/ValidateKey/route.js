@@ -3,18 +3,17 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export async function POST(request) {
     try {
         const {key} = await request.json()
-        console.log(key);
+        // console.log(key);
         const genAI = new GoogleGenerativeAI(key);
-        console.log(key);
+        // console.log(key);
         const model = genAI.getGenerativeModel({ model: "gemini-exp-1114" });
-        console.log(key);
+        // console.log(key);
         
-        const prompt = "Write a 'True'";
-        const result = await model.generateContent(prompt);
+        const result = await model.generateContent("Write a just 'True'");
         console.log(key);
-        console.log(result.response.text())
-
-        return new Response(JSON.stringify(result.response.text()),{
+        // console.log(result.response.text())
+        const text = result.response.text();
+        return new Response(JSON.stringify(text),{
           headers: { 'Content-Type': 'application/json' },
         })
         
