@@ -5,10 +5,13 @@ export async function POST(request) {
         const {key} = await request.json()
         console.log(key);
         const genAI = new GoogleGenerativeAI(key);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+        console.log(key);
+        const model = genAI.getGenerativeModel({ model: "gemini-exp-1114" });
+        console.log(key);
+        
         const prompt = "Write a 'True'";
         const result = await model.generateContent(prompt);
+        console.log(key);
         console.log(result.response.text())
 
         return new Response(JSON.stringify(result.response.text()),{

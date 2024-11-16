@@ -23,7 +23,7 @@ const Navbar = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ key }),
+            body: JSON.stringify({ key: key }),
           });
         if(response.ok){
             localStorage.setItem("Skey",key)

@@ -8,7 +8,7 @@ export async function POST(request) {
 
     // Initialize a Gemini model appropriate for your use case.
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-exp-1114",
     });
 
     // Generate content using the Base64 audio data and prompt.
@@ -22,7 +22,6 @@ export async function POST(request) {
       
       { text: "Please transcribe the audio." },
     ]);
-    console.log("hello");
     
     // const prompt = `correct the grammar mistake of following sentence, don't mention the mistake and just rewrite again: ${result.response.text()}`;
     // const result1 = await model.generateContent(prompt);
