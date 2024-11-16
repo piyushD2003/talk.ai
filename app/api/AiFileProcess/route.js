@@ -2,8 +2,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request) {
     const { data, task, mimeType,api } = await request.json();
-    const arr = mimeType.split("/")
-    console.log(arr);
+    // const arr = mimeType.split("/")
+    // console.log(arr);
     try {
         const genAI = new GoogleGenerativeAI(api);
         const model = genAI.getGenerativeModel({ model: "gemini-exp-1114" });
@@ -24,8 +24,9 @@ export async function POST(request) {
         );
 
         const result = await model.generateContent([task, imagePart]);
-        console.log(result.response.text());
-        return new Response(JSON.stringify(result.response.text()), {
+        const text = result.response.text()
+        // console.log(result.response.text());
+        return new Response(JSON.stringify(text), {
             headers: { 'Content-Type': 'application/json' },
         });
 
