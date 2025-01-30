@@ -4,11 +4,13 @@ export async function POST(request) {
     try {
     const { audio, mimeType, history, api } = await request.json();
     // Initialize GoogleGenerativeAI with your API key.
+    console.log(api);
+    
     const genAI = new GoogleGenerativeAI(api);
 
     // Initialize a Gemini model appropriate for your use case.
     const model = genAI.getGenerativeModel({
-      model: "gemini-exp-1114",
+      model: "gemini-1.5-flash",
     });
 
     // Generate content using the Base64 audio data and prompt.
@@ -22,6 +24,7 @@ export async function POST(request) {
       
       { text: "Please transcribe the audio." },
     ]);
+    console.log(result.response.text());
     
     // const prompt = `correct the grammar mistake of following sentence, don't mention the mistake and just rewrite again: ${result.response.text()}`;
     // const result1 = await model.generateContent(prompt);
@@ -36,7 +39,8 @@ export async function POST(request) {
     const transcript = result.response.text()
     const result1 = await chat.sendMessage(result.response.text())
     const AiResponse = result1.response.text();
-
+    console.log(AiResponse);
+    
     // chatHistory.push({ role: "user", parts: [{ text: transcript }] });
     // chatHistory.push({ role: "model", parts: [{ text: AiResponse }] });
     // console.log(chatHistory);

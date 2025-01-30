@@ -96,6 +96,7 @@ const AudioRecorderNative = () => {
           audio: base64Audio,
           mimeType: 'audio/wav', // Adjust this if you use a different audio format
           history: chatHistory,
+          api : localStorage.getItem('Skey')
         }),
       });
       const result = await response.json();
