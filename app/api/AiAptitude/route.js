@@ -7,7 +7,7 @@ export async function POST(request) {
         const genAI = new GoogleGenerativeAI(api);
 
         let model = genAI.getGenerativeModel({
-            model: "gemini-exp-1114",
+            model: "gemini-1.5-flash",
           });
         let prompt = `
         give a single question(have 4 options each) for given: ${data.test},

@@ -66,8 +66,9 @@ const Aptitude = () => {
                 setChatHistory([...chatHistory, { role: "model", parts: [{ text: result.AiResponse }], }])
             }
             // result = result.replace(/\n/g, '<br>');
+            
             let j = JSON.parse(result.AiResponse)
-            console.log(j);
+            console.log("Ress",j);
             console.log(j.options);
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {

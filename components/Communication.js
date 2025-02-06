@@ -125,6 +125,7 @@ const AudioRecorderNative = () => {
             let res;
             let feed;
             if (h.role == "model") {
+              console.log(h.parts[0]);
               const ResponseHis = JSON.parse(h.parts[0].text)
               console.log("Testing:", ResponseHis)
               res = ResponseHis.ResponseTutor
