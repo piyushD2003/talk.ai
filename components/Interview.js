@@ -210,6 +210,8 @@ const AudioRecorderNative = () => {
         }),
       });
       const result = await response.json();
+      console.log(result);
+      
       if (result) {
         setChatHistory([...chatHistory, { role: "user", parts: [{ text: result.transcript }], }, { role: "model", parts: [{ text: result.AiResponse }], }])
       }

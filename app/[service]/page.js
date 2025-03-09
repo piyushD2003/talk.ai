@@ -11,8 +11,8 @@ import { redirect } from 'next/navigation'
 
 const Service =({params}) => {
     useEffect(() => {
-        if(localStorage.getItem('Skey')==null){
-          alert("Please Enter the key")
+        if(localStorage.getItem('Skey')==null || localStorage.getItem('token')==null ){
+          alert("Please Enter the key or Sign in")
           redirect("/")
         }
     }, [])

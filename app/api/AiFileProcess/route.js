@@ -6,7 +6,7 @@ export async function POST(request) {
     // console.log(arr);
     try {
         const genAI = new GoogleGenerativeAI(api);
-        const model = genAI.getGenerativeModel({ model: "gemini-exp-1114" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         function fileToGenerativePart(data, mimeType) {
             return {
