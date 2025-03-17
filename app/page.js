@@ -1,9 +1,12 @@
 'use client'
 import React, { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+
 export default function Home() {
   const [text, setText] = useState('');
   const [index, setIndex] = useState(0);
   const fullText = "Unlock your potential with our AI-driven companion \nExperience a smarter way to achieve your goals.";
+  const [showModal, setShowModal] = useState("hidden");
 
   useEffect(() => {
     if (index < fullText.length) {
@@ -13,10 +16,19 @@ export default function Home() {
       }, 40); // Adjust speed here (100ms for each letter)
 
       return () => clearTimeout(timeoutId); // Clean up timeout on each render
+    }else {
+      // Wait for 2 seconds after full text is displayed, then reset
+      const resetTimeout = setTimeout(() => {
+        setText('');
+        setIndex(0);
+      }, 4000); // 2 seconds delay before restarting
+
+      return () => clearTimeout(resetTimeout);
     }
   }, [index, fullText]);
   return (
     <>
+    <Navbar showModal={showModal} setShowModal={setShowModal} /> {/* Pass modal state */}
     <div className="relative pb-20 h-screen flex flex-col bg-cover bg-center" 
          style={{ backgroundImage: "url('https://burst.shopifycdn.com/photos/icy-summit-of-a-mountain-on-a-frosty-night.jpg?width=1000&format=pjpg&exif=0&iptc=0')" }}>
       {/* Overlay */}
@@ -25,12 +37,24 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
         <h1 className="text-7xl font-bold tracking-widest ">AI BASED JOB CRACKER</h1>
-        <pre className="mt-4 md:text-lg text-sm max-w-lg overflow-hidden h-[112px]">
+        <pre className="mt-4 md:text-lg text-sm max-w-lg overflow-hidden h-[90px]">
         {text}
           {/* Mountains are formed through tectonic forces or volcanism. These forces can locally raise the surface of the earth. Mountains erode slowly through the action of rivers, weather conditions, and glaciers. */}
         </pre>
+      {/* Buttons to open modal */}
+      <div className="mt-2 flex space-x-4">
+            <button 
+              onClick={() => setShowModal("")} 
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+              Quick Use
+            </button>
+            <button 
+              onClick={() => setShowModal("")} 
+              className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
+              Sign In
+            </button>
+          </div>
       </div>
-
     </div>
     </>
   );

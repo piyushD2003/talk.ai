@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Script from 'next/script'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-const Navbar = () => {
+const Navbar = ({ showModal, setShowModal }) => {
     const [key, setKey] = useState("")
     const [nameNav, setNameNav] = useState("")
     const [color, setColor] = useState("")
@@ -14,6 +14,8 @@ const Navbar = () => {
     const [token, setToken] = useState(null);
 
     useEffect(() => {
+        console.log(showModal);
+        
         if (localStorage.getItem('Skey')) {
             setNameNav(localStorage.getItem('name'))
             setKey(localStorage.getItem('Skey'))
@@ -66,6 +68,9 @@ const Navbar = () => {
                 setPassword("")
                 setName("")
                 setKey("")
+
+                window.location.reload();
+
             } else {
                 alert(data.message || "Registration failed")
             }
@@ -100,8 +105,9 @@ const Navbar = () => {
                 // Clear form fields
                 setEmail("")
                 setPassword("")
-                // Redirect to main page
-                redirect("/")
+
+                // Reload the page
+                window.location.reload();
             } else {
                 alert(data.message || "Login failed")
             }
@@ -116,7 +122,8 @@ const Navbar = () => {
             localStorage.removeItem("Skey")
             localStorage.removeItem("name")
             alert("Logged out Successfully")
-            redirect("/")
+            // Reload the page
+            window.location.reload();
 
         }
         else{
@@ -213,13 +220,10 @@ const Navbar = () => {
                                     <svg xmlns="http://www.w3.org/2000/svg" height="20.57" width="22.25" viewBox="0 0 448 512"><path fill="#74C0FC" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z" /></svg>
                                 </div>
                             </button>
-
-
                         </li>
                     </ul>
                 </div>
             </div>
-            <script src="https://unpkg.com/flowbite@1.6.0/dist/flowbite.js" async />
             {/* <!-- Main modal --> */}
             <div id="authentication-modal" tabIndex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
                 <div className="relative p-4 w-full max-w-md max-h-full">
@@ -263,7 +267,7 @@ const Navbar = () => {
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 Register
                             </h3>
-                            <button type="button" className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
+                            <button type="button" className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal-register">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
@@ -297,7 +301,7 @@ const Navbar = () => {
             </div>
 
             {/* Login Modal */}
-            <div id="authentication-modal-login" tabIndex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
+            <div id="authentication-modal-login" tabIndex="-1" aria-hidden="true" className={`hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm`}>
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -306,7 +310,8 @@ const Navbar = () => {
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 login
                             </h3>
-                            <button type="button" className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
+                            <button type="button" onClick={() => setShowModal("hidden")} className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
+                            data-modal-hide="authentication-modal-login">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
@@ -330,6 +335,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
+            <script src="https://unpkg.com/flowbite@1.6.0/dist/flowbite.js" async />
         </nav>
 
     )
