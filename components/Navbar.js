@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import Script from 'next/script'
 import Image from 'next/image'
+import { useModal } from "@/context/ModalContext"
 import { redirect } from 'next/navigation'
-const Navbar = ({ showModal, setShowModal }) => {
+const Navbar = () => {
     const [key, setKey] = useState("")
     const [nameNav, setNameNav] = useState("")
     const [color, setColor] = useState("")
@@ -12,9 +13,9 @@ const Navbar = ({ showModal, setShowModal }) => {
     const [name, setName] = useState("");
     const [isRegistering, setIsRegistering] = useState(false);
     const [token, setToken] = useState(null);
+    const { showLoginModal, setShowLoginModal, showQuickModal, setShowQuickModal } = useModal();
 
     useEffect(() => {
-        console.log(showModal);
         
         if (localStorage.getItem('Skey')) {
             setNameNav(localStorage.getItem('name'))
@@ -225,7 +226,7 @@ const Navbar = ({ showModal, setShowModal }) => {
                 </div>
             </div>
             {/* <!-- Main modal --> */}
-            <div id="authentication-modal" tabIndex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
+            <div id="authentication-modal" tabIndex="-1" aria-hidden="true" className={`${showQuickModal?"flex":"hidden"} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm`}>
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -234,7 +235,7 @@ const Navbar = ({ showModal, setShowModal }) => {
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 Please Add Your Gemini Key
                             </h3>
-                            <button type="button" className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
+                            <button type="button" onClick={() => setShowQuickModal(false)} className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
@@ -258,7 +259,7 @@ const Navbar = ({ showModal, setShowModal }) => {
                 </div>
             </div>
 
-            <div id="authentication-modal-register" tabIndex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
+            <div id="authentication-modal-register" tabIndex="-1" aria-hidden="true" className={`hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm`}>
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -301,7 +302,8 @@ const Navbar = ({ showModal, setShowModal }) => {
             </div>
 
             {/* Login Modal */}
-            <div id="authentication-modal-login" tabIndex="-1" aria-hidden="true" className={`hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm`}>
+            <div id="authentication-modal-login" tabIndex="-1" aria-modal={showLoginModal ? "true" : "false"}
+        role="dialog"  className={`${showLoginModal?"flex":"hidden"} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm`}>
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -310,7 +312,7 @@ const Navbar = ({ showModal, setShowModal }) => {
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 login
                             </h3>
-                            <button type="button" onClick={() => setShowModal("hidden")} className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
+                            <button type="button" onClick={() => setShowLoginModal(false)} className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
                             data-modal-hide="authentication-modal-login">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
