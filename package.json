@@ -19,6 +19,7 @@
     "formidable": "^3.5.1",
     "google-tts-api": "^2.0.2",
     "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "mongodb": "^6.14.2",
     "mongoose": "^8.12.1",
     "mongoose-sequence": "^6.0.1",
@@ -28,7 +29,8 @@
     "react": "^18",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^18",
-    "say": "^0.16.0"
+    "say": "^0.16.0",
+    "styled-components": "^6.1.16"
   },
   "devDependencies": {
     "eslint": "^8",

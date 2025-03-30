@@ -1,13 +1,10 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import { useModal } from "@/context/ModalContext"
-
 export default function Home() {
   const [text, setText] = useState('');
   const [index, setIndex] = useState(0);
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
   const fullText = "Unlock your potential with our AI-driven companion \nExperience a smarter way to achieve your goals.";
   const { showLoginModal, setShowLoginModal, showQuickModal, setShowQuickModal } = useModal()
   // const [showQuickModal, setShowQuickModal] = useState(false);
@@ -32,11 +29,6 @@ export default function Home() {
     }
   }, [index, fullText]);
 
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    setMouseX(clientX);
-    setMouseY(clientY);
-  };
 
   return (
     <>
@@ -44,19 +36,19 @@ export default function Home() {
     {/* <Navbar showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} showQuickModal={showQuickModal} setShowQuickModal={setShowQuickModal} /> */}
     {/* <FrontPageLayout showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} showQuickModal={showQuickModal} setShowQuickModal={setShowQuickModal} /> */}
     <div className="relative pb-20 h-screen flex flex-col bg-cover bg-center" 
-    onMouseMove={handleMouseMove}
          style={{ backgroundImage: "url('https://burst.shopifycdn.com/photos/icy-summit-of-a-mountain-on-a-frosty-night.jpg?width=1000&format=pjpg&exif=0&iptc=0')" }}>
       {/* Overlay */}
       <div className="absolute inset-0 bg-black opacity-30"></div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-        <h1 className="text-7xl font-bold tracking-widest " style={{
-              background: `radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(255, 255, 255, 1), rgba(0, 0, 0, 0.2))`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              transition: "background 0.1s ease",
-            }}>AI BASED JOB CRACKER</h1>
+      <h1
+            className="text-7xl font-bold font-extrabold bg-clip-text text-transparent 
+bg-[linear-gradient(to_right,theme(colors.white),theme(colors.blue.200),theme(colors.indigo.400),theme(colors.cyan.300),theme(colors.teal.400),theme(colors.slate.500),theme(colors.blue.800),theme(colors.white))] 
+bg-[length:200%_auto] animate-gradient"
+          >
+            AI BASED JOB CRACKER
+          </h1>
         <pre className="mt-4 md:text-lg text-sm max-w-lg overflow-hidden h-[90px]">
         {text}
           {/* Mountains are formed through tectonic forces or volcanism. These forces can locally raise the surface of the earth. Mountains erode slowly through the action of rivers, weather conditions, and glaciers. */}
@@ -81,6 +73,21 @@ export default function Home() {
           </div>
       </div>
     </div>
+    <style jsx>{`
+        @keyframes gradientAnimation {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        gradient: {
+          to: { background-position: 200% center },
+        }
+
+        .animate-gradient {
+          animation: gradientAnimation 8s infinite linear;
+        }
+      `}</style>
     </>
   );
 }
