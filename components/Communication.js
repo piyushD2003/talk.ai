@@ -281,7 +281,7 @@ Your goal is to help the user improve their communication skills by providing co
         return (
           <div className="space-y-4">
             <h2 className="text-2xl font-bold">Who am I?</h2>
-            <p className="text-slate-500">Describe the AI character you'll talk to</p>
+            <p className="text-slate-500">Describe the AI character you&apos;ll talk to</p>
             <Input
               value={aiCharacter}
               onChange={(e) => setAiCharacter(e.target.value)}
