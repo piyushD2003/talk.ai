@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState, useRef } from "react";
-import Navbar from "@/components/Navbar";
 import { useModal } from "@/context/ModalContext"
 export default function Home() {
   const [text, setText] = useState('');
@@ -42,11 +41,9 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-      <h1
-            className="text-7xl font-bold font-extrabold bg-clip-text text-transparent 
-bg-[linear-gradient(to_right,theme(colors.white),theme(colors.blue.200),theme(colors.indigo.400),theme(colors.cyan.300),theme(colors.teal.400),theme(colors.slate.500),theme(colors.blue.800),theme(colors.white))] 
-bg-[length:200%_auto] animate-gradient"
-          >
+      <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold bg-clip-text text-transparent 
+              bg-[linear-gradient(to_right,#fff,#9b87f5,#6E59A5,#0EA5E9,#33C3F0,#8B5CF6,#fff)] 
+              bg-[length:200%_auto] animate-gradient tracking-tight">
             AI BASED JOB CRACKER
           </h1>
         <pre className="mt-4 md:text-lg text-sm max-w-lg overflow-hidden h-[90px]">
@@ -80,12 +77,17 @@ bg-[length:200%_auto] animate-gradient"
           100% { background-position: 0% 50%; }
         }
         
-        gradient: {
-          to: { background-position: 200% center },
-        }
-
         .animate-gradient {
           animation: gradientAnimation 8s infinite linear;
+        }
+        
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        
+        .animate-blink {
+          animation: blink 1s infinite;
         }
       `}</style>
     </>
