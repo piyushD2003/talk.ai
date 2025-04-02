@@ -51,7 +51,7 @@ export async function POST(req) {
             // Generate JWT token
             const token = jwt.sign({ userId: user._id, email: user.email }, SECRET_KEY, { expiresIn: "1h" });
 
-            return NextResponse.json({ message: "Login successful", token, Skey: user.SKey, name: user.name }, { status: 200 });
+            return NextResponse.json({ message: "Login successful", token, Skey: user.SKey, name: user.name, email: user.email }, { status: 200 });
         }
 
         return NextResponse.json({ message: "Invalid action" }, { status: 400 });

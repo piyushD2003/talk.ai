@@ -6,21 +6,31 @@ import { useModal } from "@/context/ModalContext"
 import { redirect } from 'next/navigation'
 const Navbar = () => {
     const [key, setKey] = useState("")
-    const [nameNav, setNameNav] = useState("")
-    const [color, setColor] = useState("")
     const [email, setEmail] = useState("");
+    const [nameNav, setNameNav] = useState("")
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
-    const [isRegistering, setIsRegistering] = useState(false);
+    const [color, setColor] = useState("")
+    // const [isRegistering, setIsRegistering] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState(null);
     const { showLoginModal, setShowLoginModal, showQuickModal, setShowQuickModal } = useModal();
 
     useEffect(() => {
         
         if (localStorage.getItem('Skey')) {
-            setNameNav(localStorage.getItem('name'))
             setKey(localStorage.getItem('Skey'))
+            setNameNav(localStorage.getItem('name'))
         }
+
+        if (localStorage.getItem('token') && localStorage.getItem('name')) {
+            setIsLoggedIn(true);
+            setEmail(localStorage.getItem('email'))
+            setName(localStorage.getItem('name'))
+        } else {
+            setIsLoggedIn(false); // Ensure it's explicitly set to false if not logged in
+        }
+
     }, [])
 
     const handleSubmit = async (e) => {
@@ -63,7 +73,7 @@ const Navbar = () => {
 
             if (response.ok) {
                 alert("Registration successful! Please login.")
-                setIsRegistering(false)
+                // setIsRegistering(false)
                 // Clear form fields
                 setEmail("")
                 setPassword("")
@@ -96,12 +106,13 @@ const Navbar = () => {
             })
 
             const data = await response.json()
-
+            
             if (response.ok) {
                 alert("Login successful!")
                 localStorage.setItem("token", data.token)
                 localStorage.setItem("Skey", data.Skey)
                 localStorage.setItem("name", data.name)
+                localStorage.setItem("email", data.email)
                 setToken(data.token)
                 // Clear form fields
                 setEmail("")
@@ -118,19 +129,57 @@ const Navbar = () => {
     }
 
     const handleLogout = async (e) =>{
-        if(localStorage.getItem('token')){
             localStorage.removeItem("token")
             localStorage.removeItem("Skey")
             localStorage.removeItem("name")
             alert("Logged out Successfully")
             // Reload the page
             window.location.reload();
-
-        }
-        else{
-            alert("You are'nt logged in uccessfully")
-        }
     }
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const token = localStorage.getItem('token'); 
+            const response = await fetch('/api/Auth', { 
+                method: 'PATCH', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email: email,     
+                    name: name,       
+                    SKey: key,        
+                    password: password
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Profile updated successfully!');
+                // Optionally update localStorage with new name if changed
+                if (name) {
+                    localStorage.setItem('name', name);
+                    setNameNav(name); // Update Navbar's displayed name if needed
+                }
+                // Optionally clear password field
+                setPassword("");
+
+                // Optionally close the modal after successful update
+                // document.getElementById('authentication-modal-edit').style.display = 'none'; // Directly hide (less React-y)
+                 window.location.reload();
+            } else {
+                alert(data.message || 'Failed to update profile.');
+            }
+
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('An error occurred while updating the profile.');
+        }
+    };
 
 
     return (
@@ -183,7 +232,7 @@ const Navbar = () => {
 
                         <li>
                             <button id="dropdownNavbarLink1" data-dropdown-toggle="dropdownNavbar1" type="button" className={`flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent`}>
-                                {nameNav?nameNav:"User"}
+                                {name?name.split(" ")[0]:"User"}
                                 <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                             </svg></button>
@@ -201,12 +250,12 @@ const Navbar = () => {
                                         </button>
                                     </li>
                                     <li>
-                                        <button data-modal-target="authentication-modal-login" data-modal-toggle="authentication-modal-login" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" type="button">
+                                        <button data-modal-target="authentication-modal-edit" data-modal-toggle="authentication-modal-edit" className={`${isLoggedIn?"block":"hidden"} px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white`} type="button">
                                             Edit
                                         </button>
                                     </li>
                                     <li>
-                                        <button className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={handleLogout} type="button">
+                                        <button className={`${isLoggedIn?"block":"hidden"} px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white`} onClick={handleLogout} type="button">
                                             Logout
                                         </button>
                                     </li>
@@ -247,7 +296,7 @@ const Navbar = () => {
                             <form className="space-y-4" action="#">
                                 <div>
                                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Key</label>
-                                    <input type="text" name="Skey" id="Skey" value={key} onChange={(e) => { setKey(e.target.value) }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="AIzaSyDtGMphqJpLrymEWq4XA3zSWT9i6AVLyEs" required />
+                                    <input type="text" name="Skey" id="Skey" value={name&&key?"":key} onChange={(e) => { setKey(e.target.value) }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="AIzaSyDtGMphqJpLrymEWq4XA3zSWT9i6AVLyEs" required />
                                 </div>
                                 <button type="submit" onClick={handleSubmit} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Key</button>
                                 <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
@@ -259,6 +308,7 @@ const Navbar = () => {
                 </div>
             </div>
 
+            {/* Register Modal */}
             <div id="authentication-modal-register" tabIndex="-1" aria-hidden="true" className={`hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm`}>
                 <div className="relative p-4 w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
@@ -332,6 +382,50 @@ const Navbar = () => {
                                     <input type="password" name="password" id="password" value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                                 </div>
                                 <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login to your account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Edit Modal */}
+
+            <div id="authentication-modal-edit" tabIndex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
+                <div className="relative p-4 w-full max-w-md max-h-full">
+                    {/* <!-- Modal content --> */}
+                    <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        {/* <!-- Modal header --> */}
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                Edit Profile
+                            </h3>
+                            <button type="button" className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal-edit">
+                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span className="sr-only">Close modal</span>
+                            </button>
+                        </div>
+                        {/* <!-- Modal body --> */}
+                        <div class="p-4 md:p-5">
+                            <form class="space-y-4" onSubmit={handleEditSubmit}>  {/* Replace with your submit handler */}
+                                <div>
+                                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                                    <input type="email" name="email" id="email" value={email} onChange={(e)=>{setEmail(e.target.value)}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com"/>
+                                </div>
+                                <div class="col-span-2">
+                                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                    <input type="text" name="name" id="name" value={name} onChange={(e)=>{setName(e.target.value)}} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Key</label>
+                                    <input type="text" name="Skey" id="Skey" value={key} onChange={(e) => { setKey(e.target.value) }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="AIzaSyDtGMphqJpLrymEWq4XA3zSWT9i6AVLyEs"  />
+                                </div>
+                                <div>
+                                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
+                                    <input type="password" name="password" id="password" value={password} onChange={(e)=>{setPassword(e.target.value)}} placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+                                </div>
+                                <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update Profile</button>
                             </form>
                         </div>
                     </div>

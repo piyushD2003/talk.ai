@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request) {
     try {
-    const { audio, mimeType, history, api } = await request.json();
+    const { audio, mimeType, api } = await request.json();
     // Initialize GoogleGenerativeAI with your API key.
     console.log(api);
     
@@ -25,20 +25,10 @@ export async function POST(request) {
       { text: "Please transcribe the audio." },
     ]);
     console.log("Hello1", result);
-
-    
-
-    const chat = model.startChat({history: history});
     
     const transcript = result.response.text()
-    const result1 = await chat.sendMessage(result.response.text())
-    const AiResponse = result1.response.text();
-    console.log(AiResponse);
     
-    // chatHistory.push({ role: "user", parts: [{ text: transcript }] });
-    // chatHistory.push({ role: "model", parts: [{ text: AiResponse }] });
-    // console.log(chatHistory);
-    return new Response(JSON.stringify({ transcript: transcript, AiResponse}), {
+    return new Response(JSON.stringify({ transcript: transcript}), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
