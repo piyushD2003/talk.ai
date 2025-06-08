@@ -8,16 +8,20 @@ import Interview from '@/components/Interview'
 import { notFound } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { redirect } from 'next/navigation'
-
 const Service =({params}) => {
+    const [Skey, setSkey] = useState(localStorage.getItem('Skey'))
+    const [token, setToken] = useState(localStorage.getItem('token'))
+
     useEffect(() => {
-        console.log(localStorage.getItem('Skey')==null || localStorage.getItem('token')==null);
-        
-        if(localStorage.getItem('Skey')==null && localStorage.getItem('token')==null ){
+        const storedKey = localStorage.getItem('Skey')
+        setSkey(storedKey)
+        const storedToken = localStorage.getItem('token')
+        setToken(storedToken)
+        if(Skey==null && token==null ){
           alert("Please Enter the key or Sign in")
           redirect("/")
         }
-    }, [])
+    }, [Skey, token])
     // const [API, setAPI] = useState(null)
     // useEffect(() => {
     //     console.log(API);

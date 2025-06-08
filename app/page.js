@@ -6,9 +6,15 @@ export default function Home() {
   const [index, setIndex] = useState(0);
   const fullText = "Unlock your potential with our AI-driven companion \nExperience a smarter way to achieve your goals.";
   const { showLoginModal, setShowLoginModal, showQuickModal, setShowQuickModal } = useModal()
+  const [Skey, setSkey] = useState()
+
   // const [showQuickModal, setShowQuickModal] = useState(false);
   // const [showLoginModal, setShowLoginModal] = useState(false);
-
+  useEffect(() => {
+    const storedKey = localStorage.getItem('Skey')
+    setSkey(storedKey)
+  }, [])
+  
   useEffect(() => {
     if (index < fullText.length) {
       const timeoutId = setTimeout(() => {
@@ -51,7 +57,7 @@ export default function Home() {
           {/* Mountains are formed through tectonic forces or volcanism. These forces can locally raise the surface of the earth. Mountains erode slowly through the action of rivers, weather conditions, and glaciers. */}
         </pre>
       {/* Buttons to open modal */}
-        {localStorage.getItem("Skey")?"":
+        {Skey?"":
       <div className="mt-2 flex space-x-4">
             <button 
               onClick={() => setShowQuickModal(true)} 

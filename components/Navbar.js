@@ -417,7 +417,7 @@ const Navbar = () => {
                                                 <button type="button" class="w-24 ms-2 mt-7 flex-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handleSubmit}>Verify</button>
                                             </div>
                                             <div className="mt-2">
-                                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">Don't have a key? Get it from Google AI Studio →</a>
+                                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm">Don&apos;t have a key? Get it from Google AI Studio →</a>
                                             </div>
                                             {/* Validation message */}
                                             <div className="mt-2 text-sm">
