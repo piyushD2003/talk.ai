@@ -12,7 +12,7 @@ export async function POST(req) {
     await connectDB();
 
     try {
-        const { action, email, password, name, SKey } = await req.json();
+        const { action, email, password, name,college, highestqualification, qualificationyear, SKey } = await req.json();
 
         if (!email || !password) {
             return NextResponse.json({ message: "Email and password are required" }, { status: 400 });
@@ -29,7 +29,7 @@ export async function POST(req) {
             const hashedPassword = await bcrypt.hash(password, 10);
 
             // Create user in DB
-            const newUser = new User({ email, name, password: hashedPassword, SKey });
+            const newUser = new User({ email, name, college, highestqualification, qualificationyear, password: hashedPassword, SKey });
             await newUser.save();
 
             return NextResponse.json({ message: "User registered successfully" }, { status: 201 });

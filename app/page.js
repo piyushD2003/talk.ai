@@ -51,6 +51,7 @@ export default function Home() {
           {/* Mountains are formed through tectonic forces or volcanism. These forces can locally raise the surface of the earth. Mountains erode slowly through the action of rivers, weather conditions, and glaciers. */}
         </pre>
       {/* Buttons to open modal */}
+        {localStorage.getItem("Skey")?"":
       <div className="mt-2 flex space-x-4">
             <button 
               onClick={() => setShowQuickModal(true)} 
@@ -68,7 +69,8 @@ export default function Home() {
               </span>
             </button>
           </div>
-      </div>
+            }
+            </div>
     </div>
     <style jsx>{`
         @keyframes gradientAnimation {
